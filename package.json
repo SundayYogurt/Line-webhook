@@ -1,7 +1,7 @@
 {
   "name": "line-webhook",
   "version": "1.0.0",
-  "description": "this is for line chat bot",
+  "description": "this is a webhook for line chatbot",
   "main": "index.js",
   "engines": {
     "node": "10"
@@ -16,11 +16,11 @@
     "chatbot",
     "webhook"
   ],
-  "author": "KS",
+  "author": "Worachet Uttha",
   "license": "ISC",
   "dependencies": {
     "express": "^4.19.2",
     "actions-on-google": "^2.2.0",
-    "dialogflow-fulfillment": "^0.5.0"
+    "dialogflow-fulfillment": "^0.6.1"
   }
 }
