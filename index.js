@@ -1,26 +1,25 @@
 const express = require("express");
 const bodyParser = require("body-parser");
 const { WebhookClient, Payload } = require("dialogflow-fulfillment");
-const port = 4000;
+const port = 5000;
 
 // create server
-const app = express(); // create express application.
+const app = express();
 
-//middleware
-app.use(bodyParser.json()); // covert text to json.
+// middleware
+app.use(bodyParser.json());
 
 app.get("/", (req, res) => {
-  res.send("<h1>Welcome, this is a webhook for line chatbot</h1>");
-}); // arrow fuction ()
+  res.send("<h1>Welcome, this is a webhook for Line Chatbot.</h1>");
+});
 
 app.post("/webhook", (req, res) => {
-  //create webhook client
+  //create webhook
   const agent = new WebhookClient({
     request: req,
     response: res,
   });
-
-  console.log("Dialogflow Request headers: " + JSON.stringify(req.headers));
+  console.log("Dialogflow Request headers:" + JSON.stringify(req.headers));
   console.log("Dialogflow Request body: " + JSON.stringify(req.body));
 
   function welcome(agent) {
@@ -32,23 +31,24 @@ app.post("/webhook", (req, res) => {
     agent.add(`I'm sorry, can you try again?`);
   }
 
-  function bodyMassIndex(agent) {
+  function bodyMessIndex(agent) {
     let weight = agent.parameters.weight;
-    let height = agent.parameters.height / 100;
-    let bmi = (weight / (height * height)).toFixed(2);
-    let result = "ขออภัย หนูไม่เข้าใจ";
+    let height = agent.parameters.height;
+    let bmi = weight / (height * height).toFixed(2);
+    let result = "I can't understand";
 
     if (bmi < 18.5) {
-      result = "คุณผอมไป กินข้าวบ้างนะ";
+      result = "คุณผอมเกินไป กินข้าวบ้างนะ";
     } else if (bmi >= 18.5 && bmi <= 22.9) {
-      result = "คุณหุ่นดีจุงเบย";
+      result = "คุณหุ่นดี";
     } else if (bmi >= 23 && bmi <= 24.9) {
-      result = "คุณเริ่มจะท้วมแล้วนะ";
-    } else if ((bmi >= 25.8) & (bmi <= 29.9)) {
-      result = "คุณอ้วนละ ออกกำลังกายหน่อยนะ";
+      result = "คุณเริ่มจะท้วม";
+    } else if (bmi >= 25.8 && bmi <= 29.9) {
+      result = "คุณอ้วนหล่ะ";
     } else if (bmi > 30) {
-      result = "คุณอ้วนเกินไปละ หาหมอเหอะ";
+      result = "คุณอ้วนเกินไป";
     }
+
     const flexMessage = {
       type: "flex",
       altText: "Flex Message",
@@ -136,10 +136,10 @@ app.post("/webhook", (req, res) => {
   let intentMap = new Map();
   intentMap.set("Default Welcome Intent", welcome);
   intentMap.set("Default Fallback Intent", fallback);
-  intentMap.set("BMI - custom - yes", bodyMassIndex);
+  intentMap.set("BMI - custom - yes", bodyMessIndex);
   agent.handleRequest(intentMap);
 });
 
-app.listen(port, () => {
-  console.log("Server is running at http://localhost:" + port);
-});
+app.listen(port, () =>
+  console.log(`Server is running at http://localhost:${port}`)
+);
