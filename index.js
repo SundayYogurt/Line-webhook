@@ -162,12 +162,20 @@ app.post("/webhook", (req, res) => {
     agent.add(`=${result}ตารางเซนติเมตร`);
   }
 
+  function calculateCircleArea(agent) {
+    let Raduis = agent.parameters.Raduis;
+    let result = Math.PI * Raduis * Raduis;
+    agent.add(`รัศมีของวงกลมคือ ${raduis} เซนติเมตร`);
+    agent.add(`พื้นที่ของวงกลมคือ ${result.toFixed(2)} ตารางเซนติเมตร`);
+  }
+
   let intentMap = new Map();
   intentMap.set("Default Welcome Intent", welcome);
   intentMap.set("Default Fallback Intent", fallback);
   intentMap.set("BMI - custom - yes", bodyMassIndex);
   intentMap.set("area - regtangle - custom - yes", calculateRectangleArea);
   intentMap.set("area - triangle - custom - yes", calculateTriangleArea);
+  intentMap.set("area - circle - custom - yes", calculateCircleArea);
   agent.handleRequest(intentMap);
 });
 
