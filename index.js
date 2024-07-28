@@ -163,12 +163,27 @@ app.post("/webhook", (req, res) => {
   }
 
   function calculateCircleArea(agent) {
-    let Radius = agent.parameters.Radius;
-    let result = Math.PI * Radius * Radius;
-    agent.add(`รัศมีของวงกลมคือ ${Radius} เซนติเมตร`);
-    agent.add(`พื้นที่ของวงกลมคือ ${result.toFixed(2)} ตารางเซนติเมตร`);
-    console.log(result);
+    // รับค่ารัศมีจากพารามิเตอร์
+    let radius = agent.parameters.Radius;
+
+    // ตรวจสอบว่าค่าที่รับมาถูกต้อง
+    if (typeof radius === 'number' && radius > 0) {
+      // คำนวณพื้นที่วงกลม
+      let result = Math.PI * radius * radius;
+
+      // สร้างข้อความตอบกลับ
+      agent.add(`รัศมีของวงกลมคือ ${radius} เซนติเมตร`);
+      agent.add(`พื้นที่ของวงกลมคือ ${result.toFixed(2)} ตารางเซนติเมตร`);
+
+      // แสดงผลลัพธ์ในคอนโซล
+      console.log(`รัศมี: ${radius} เซนติเมตร`);
+      console.log(`พื้นที่: ${result.toFixed(2)} ตารางเซนติเมตร`);
+    } else {
+      // แสดงข้อความข้อผิดพลาดถ้าค่ารัศมีไม่ถูกต้อง
+      agent.add(`ค่ารัศมีไม่ถูกต้อง กรุณาใส่ค่ารัศมีที่เป็นบวก`);
+    }
   }
+
 
   let intentMap = new Map();
   intentMap.set("Default Welcome Intent", welcome);
